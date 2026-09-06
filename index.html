@@ -1,13 +1,60 @@
 <html>
-
 <head>
-Welcome
-</head>
-<title>
-HomePage
-</title>
+  <title>HomePage</title>
+  <style>
+    /* The outer box that clips the text */
+    .Moving-Welcome {
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      background-color: #f4f4f4; 
+      padding: 10px;
+    }
 
+    /* The text that actually moves */
+    .Moving-text {
+      display: inline-block;
+      animation: scroll-left 10s linear infinite;
+    }
+
+    /* The animation instructions */
+    @keyframes scroll-left {
+      0% {
+        transform: translateX(100%); 
+      }
+      100% {
+        transform: translateX(-100%); 
+      }
+    }
+
+    /* Button Styling */
+    .next-page-btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    
+    .next-page-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
 <body>
-Hello World. Welcome to our website.
+  <div class="Moving-Welcome">
+    <div class="Moving-text">Welcome</div>
+  </div>
+
+  <h1>Hello World. Welcome to our website.</h1>
+
+  <!-- The Button Link -->
+  <a href="game.html">
+    <button class="next-page-btn">Assimilation while Gaming</button>
+  </a>
+
 </body>
 </html>
