@@ -1,60 +1,211 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>HomePage</title>
-  <style>
-    /* The outer box that clips the text */
-    .Moving-Welcome {
-      width: 100%;
-      overflow: hidden;
-      white-space: nowrap;
-      background-color: #f4f4f4; 
-      padding: 10px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanctuary | Learn, Study, and Assimilation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    /* The text that actually moves */
-    .Moving-text {
-      display: inline-block;
-      animation: scroll-left 10s linear infinite;
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #090d16;
+            color: #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-    /* The animation instructions */
-    @keyframes scroll-left {
-      0% {
-        transform: translateX(100%); 
-      }
-      100% {
-        transform: translateX(-100%); 
-      }
-    }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 48px;
+            background: rgba(9, 13, 22, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
 
-    /* Button Styling */
-    .next-page-btn {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-    
-    .next-page-btn:hover {
-      background-color: #0056b3;
-    }
-  </style>
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            font-size: 1.25rem;
+            letter-spacing: 2px;
+            color: #e2e8f0;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #94a3b8;
+            text-decoration: none;
+            margin-left: 24px;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ffffff;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 60px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .sanctuary-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            font-weight: 400;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            color: #f8fafc;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            margin-bottom: 40px;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .cta-container {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background-color: transparent;
+            color: #f8fafc;
+            padding: 14px 28px;
+            font-size: 0.95rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #ffffff;
+            color: #090d16;
+            border-color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 24px;
+            font-size: 0.85rem;
+            color: #475569;
+            letter-spacing: 1px;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        footer a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #cbd5e1;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            header {
+                padding: 20px;
+            }
+            nav a {
+                margin-left: 14px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="Moving-Welcome">
-    <div class="Moving-text">Welcome</div>
-  </div>
 
-  <h1>Hello World. Welcome to our website.</h1>
+    <header>
+        <div class="logo">SANCTUARY</div>
+        <nav>
+            <a href="#study">Study</a>
+            <a href="#pure">Purity</a>
+            <a href="AssimiType.html">AssimiType</a>
+            <a href="https://www.youtube.com/@NarayanGyanmala" target="_blank">Narayan Gyanmala</a>
+            <a href="https://www.youtube.com/@anshu00163" target="_blank">YouTube</a>
+        </nav>
+    </header>
 
-  <!-- The Button Link -->
-  <a href="game.html">
-    <button class="next-page-btn">Assimilation while Gaming</button>
-  </a>
+    <main>
+        <div class="sanctuary-badge">Focus • Wisdom • Immersion</div>
+        <h1>Hello World.</h1>
+        <p>A dedicated digital space to learn, maintain purity, focus deeply on studies, and achieve complete assimilation while gaming.</p>
+        <div class="cta-container">
+            <a href="AssimiType.html" class="btn">AssimiType</a>
+            <a href="https://www.youtube.com/@NarayanGyanmala" target="_blank" class="btn" style="border-color: rgba(255,255,255,0.05); color: #94a3b8;">Narayan Gyanmala</a>
+            <a href="https://www.youtube.com/@anshu00163" target="_blank" class="btn" style="border-color: rgba(255,255,255,0.05); color: #94a3b8;">My Channel</a>
+        </div>
+    </main>
+
+    <footer>
+        <span>&copy; 2026 Anshuman Paudel. All rights reserved.</span>
+        <div class="footer-links">
+            <a href="https://www.youtube.com/@NarayanGyanmala" target="_blank">Narayan Gyanmala</a>
+            <a href="https://www.youtube.com/@anshu00163" target="_blank">YouTube</a>
+        </div>
+    </footer>
 
 </body>
 </html>
