@@ -1,0 +1,22 @@
+const dbmsContent = [
+  "// Unit I: Fundamentals of Database Management Systems and SQL Programming",
+  "A database management system is software that provides an interface between users and the database while ensuring data integrity, security, and efficient access.",
+  "The three-level ANSI-SPARC architecture separates the external user views, the conceptual schema describing the entire database, and the internal physical storage schema.",
+  "Data independence allows the conceptual schema to change without affecting external views and the internal schema to change without affecting the conceptual schema.",
+  "In the relational model data is organized into relations which are tables consisting of tuples and attributes with a fixed domain for each attribute.",
+  "A primary key uniquely identifies each tuple in a relation while a foreign key references the primary key of another relation to enforce referential integrity.",
+  "Integrity constraints include entity integrity requiring primary keys to be non-null and unique and referential integrity ensuring foreign keys match existing primary keys or are null.",
+  "Entity-relationship modeling identifies entities, their attributes, and the relationships among entities using cardinality and participation constraints.",
+  "Relational algebra provides a procedural query language with operators including select, project, union, set difference, Cartesian product, and join.",
+  "// Unit II: Database Normalization, Security, and PL/SQL Programming",
+  "Functional dependency describes a constraint between two sets of attributes where the value of one set determines the value of the other set.",
+  "A candidate key is a minimal superkey that uniquely identifies tuples; one of the candidate keys is chosen as the primary key.",
+  "First normal form requires that every attribute value is atomic; second normal form eliminates partial dependencies of non-prime attributes on a candidate key.",
+  "Third normal form eliminates transitive dependencies of non-prime attributes while Boyce-Codd normal form requires every determinant to be a candidate key.",
+  "Database security threats include unauthorized access, SQL injection, privilege escalation, and denial of service; countermeasures involve authentication, authorization, encryption, and auditing.",
+  "// Unit III: Query Processing and Optimization, Transaction Processing, Concurrency Control, and Recovery",
+  "A transaction is a logical unit of work that must satisfy the ACID properties of atomicity, consistency, isolation, and durability.",
+  "Serializability ensures that the concurrent execution of transactions produces the same effect as some serial order of those transactions.",
+  "Locking protocols acquire shared or exclusive locks on data items; two-phase locking guarantees serializability by dividing lock acquisition and release phases.",
+  "Database recovery techniques use the log of operations to undo the effects of incomplete transactions and redo the effects of committed transactions after a failure."
+];

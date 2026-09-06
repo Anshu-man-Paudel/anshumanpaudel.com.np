@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExamType Pro | Engineering Typing Mastery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #070b14; --bg2: #0d1320; --surface: #151e2e; --surface2: #1e2a3d;
+  --accent: #00f5d4; --accent2: #9b5de5; --accent3: #f15bb5; --warning: #fee440;
+  --success: #00f5d4; --error: #ff006e; --text: #e8eef7; --text-dim: #8b9bb4; --text-muted: #5a6a82;
+  --glow: 0 0 24px rgba(0, 245, 212, 0.45); --radius: 14px;
+  --font-mono: 'JetBrains Mono', monospace; --font-display: 'Orbitron', sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font-mono); background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; position: relative; }
+.bg-grid { position: fixed; inset: 0; background-image: linear-gradient(rgba(0,245,212,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,245,212,0.025) 1px, transparent 1px); background-size: 48px 48px; pointer-events: none; z-index: 0; }
+.bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.12; animation: float 22s infinite ease-in-out; }
+.orb1 { width: 480px; height: 480px; background: var(--accent); top: -140px; left: -120px; }
+.orb2 { width: 400px; height: 400px; background: var(--accent2); bottom: -100px; right: -100px; animation-delay: -8s; }
+.orb3 { width: 320px; height: 320px; background: var(--accent3); top: 45%; left: 55%; animation-delay: -15s; }
+@keyframes float { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(40px,-50px) scale(1.12); } 66% { transform: translate(-30px,25px) scale(0.92); } }
+.particles { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
+.app { position: relative; z-index: 1; max-width: 1140px; margin: 0 auto; padding: 16px 20px 30px; min-height: 100vh; display: flex; flex-direction: column; }
+header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0 18px; border-bottom: 1px solid rgba(0,245,212,0.12); margin-bottom: 18px; }
+.logo-wrap { display: flex; align-items: center; gap: 14px; }
+.logo { font-family: var(--font-display); font-size: 1.55rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 1px; }
+.logo span { font-size: 0.7rem; font-weight: 500; color: var(--text-dim); -webkit-text-fill-color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; margin-left: 6px; }
+.player-stats { display: flex; gap: 12px; align-items: center; font-size: 0.78rem; }
+.xp-bar-wrap { width: 120px; height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; border: 1px solid rgba(0,245,212,0.2); }
+.xp-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); width: 0%; transition: width 0.4s ease; }
+.level-badge { background: linear-gradient(135deg, rgba(0,245,212,0.2), rgba(155,93,229,0.25)); border: 1px solid rgba(0,245,212,0.35); padding: 4px 10px; border-radius: 20px; font-family: var(--font-display); font-size: 0.75rem; color: var(--accent); font-weight: 700; }
+.home-link { color: var(--text-dim); text-decoration: none; font-size: 0.85rem; padding: 7px 14px; border: 1px solid rgba(0,245,212,0.25); border-radius: 8px; transition: all 0.25s; }
+.home-link:hover { color: var(--accent); border-color: var(--accent); box-shadow: var(--glow); }
+.section-title { font-family: var(--font-display); font-size: 0.78rem; letter-spacing: 2px; color: var(--text-dim); margin-bottom: 12px; text-transform: uppercase; }
+.topics { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-bottom: 20px; }
+.topic-btn { background: var(--surface); border: 1px solid rgba(0,245,212,0.18); color: var(--text); padding: 14px 10px; border-radius: var(--radius); cursor: pointer; font-family: var(--font-mono); font-size: 0.82rem; font-weight: 500; transition: all 0.28s; position: relative; overflow: hidden; text-align: center; }
+.topic-btn:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 22px rgba(0,245,212,0.12); }
+.topic-btn.active { background: linear-gradient(135deg, rgba(0,245,212,0.14), rgba(155,93,229,0.16)); border-color: var(--accent); box-shadow: var(--glow); color: var(--accent); }
+.topic-btn .icon { font-size: 1.35rem; display: block; margin-bottom: 5px; }
+.settings-panel { background: var(--surface); border: 1px solid rgba(0,245,212,0.12); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 18px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
+.setting-group { display: flex; align-items: center; gap: 8px; }
+.setting-label { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+.toggle { position: relative; width: 44px; height: 24px; background: var(--surface2); border-radius: 12px; cursor: pointer; transition: background 0.3s; border: 1px solid rgba(255,255,255,0.08); }
+.toggle.on { background: rgba(0,245,212,0.28); border-color: var(--accent); }
+.toggle::after { content: ''; position: absolute; width: 18px; height: 18px; background: var(--text-dim); border-radius: 50%; top: 2px; left: 3px; transition: all 0.3s; }
+.toggle.on::after { left: 21px; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+.duration-btns { display: flex; gap: 5px; }
+.dur-btn { background: var(--surface2); border: 1px solid transparent; color: var(--text-dim); padding: 5px 12px; border-radius: 7px; cursor: pointer; font-family: var(--font-mono); font-size: 0.8rem; transition: all 0.2s; }
+.dur-btn:hover { border-color: var(--accent); color: var(--text); }
+.dur-btn.active { background: rgba(0,245,212,0.18); border-color: var(--accent); color: var(--accent); box-shadow: 0 0 10px rgba(0,245,212,0.25); }
+.start-btn { background: linear-gradient(135deg, var(--accent), #00c4a7); color: #070b14; border: none; padding: 11px 26px; border-radius: 10px; font-family: var(--font-display); font-weight: 700; font-size: 0.9rem; cursor: pointer; letter-spacing: 1px; transition: all 0.3s; box-shadow: 0 4px 18px rgba(0,245,212,0.28); }
+.start-btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 28px rgba(0,245,212,0.45); }
+.start-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+.hud { display: flex; justify-content: center; gap: 22px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+.stat { text-align: center; min-width: 70px; }
+.stat-value { font-family: var(--font-display); font-size: 1.7rem; font-weight: 700; color: var(--accent); line-height: 1.1; transition: transform 0.15s; }
+.stat-value.pulse { animation: pulse 0.35s ease; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.18); } 100% { transform: scale(1); } }
+.stat-value.error { color: var(--error); } .stat-value.acc { color: var(--warning); } .stat-value.combo { color: var(--accent3); }
+.stat-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.4px; margin-top: 2px; }
+.combo-banner {
+  text-align: center; height: 32px; margin-bottom: 6px;
+  font-family: var(--font-display); font-size: 1.25rem; font-weight: 700;
+  color: var(--accent3); opacity: 0; transition: opacity 0.2s, transform 0.2s;
+  text-shadow: 0 0 22px rgba(241,91,181,0.7);
+}
+.combo-banner.show { opacity: 1; transform: scale(1.12); animation: comboPulse 0.4s ease; }
+@keyframes comboPulse {
+  0% { transform: scale(0.9); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1.12); }
+}
+.progress-wrap { height: 5px; background: var(--surface2); border-radius: 3px; margin-bottom: 16px; overflow: hidden; }
+.progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); width: 100%; transition: width 0.12s linear; box-shadow: 0 0 12px var(--accent); }
+.typing-area { background: var(--surface); border: 1px solid rgba(0,245,212,0.18); border-radius: var(--radius); padding: 24px 22px; min-height: 220px; position: relative; margin-bottom: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.35); transition: border-color 0.3s, box-shadow 0.3s; }
+.typing-area.focused { border-color: rgba(0,245,212,0.45); box-shadow: 0 0 30px rgba(0,245,212,0.12); }
+.words-container { font-size: 1.28rem; line-height: 1.95; letter-spacing: 0.3px; word-spacing: 4px; max-height: 280px; overflow: hidden; position: relative; user-select: none; }
+.word { display: inline-block; margin-right: 7px; position: relative; }
+.char { position: relative; transition: color 0.04s; }
+.char.correct { color: var(--success); }
+.char.incorrect { color: var(--error); background: rgba(255,0,110,0.18); border-radius: 2px; }
+.char.current { border-bottom: 2.5px solid var(--accent); animation: caret-blink 0.9s infinite; }
+@keyframes caret-blink { 0%,45% { border-color: var(--accent); box-shadow: 0 0 8px var(--accent); } 50%,100% { border-color: transparent; box-shadow: none; } }
+.char.extra { color: var(--error); opacity: 0.65; }
+.input-hidden {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: transparent;
+  caret-color: transparent;
+  z-index: 2;
+  cursor: default;
+  padding: 0;
+  margin: 0;
+  resize: none;
+}
+.focus-hint { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(7,11,20,0.88); border-radius: var(--radius); font-size: 1.05rem; color: var(--text-dim); cursor: pointer; transition: opacity 0.3s; z-index: 5; }
+.focus-hint.hidden { opacity: 0; pointer-events: none; }
+.keyboard { display: none; margin: 0 auto 16px; max-width: 620px; user-select: none; }
+.keyboard.show { display: block; }
+.kb-row { display: flex; justify-content: center; gap: 5px; margin-bottom: 5px; }
+.kb-key { background: var(--surface2); border: 1px solid rgba(255,255,255,0.07); color: var(--text-dim); border-radius: 6px; font-size: 0.72rem; min-width: 32px; height: 36px; display: flex; align-items: center; justify-content: center; transition: all 0.12s; font-family: var(--font-mono); }
+.kb-key.wide { min-width: 52px; } .kb-key.space { min-width: 180px; }
+.kb-key.next { background: rgba(0,245,212,0.22); border-color: var(--accent); color: var(--accent); box-shadow: 0 0 14px rgba(0,245,212,0.35); transform: scale(1.08); }
+.knowledge-tip { background: linear-gradient(135deg, rgba(0,245,212,0.06), rgba(155,93,229,0.08)); border: 1px solid rgba(0,245,212,0.15); border-radius: 10px; padding: 12px 16px; margin-bottom: 14px; font-size: 0.82rem; color: var(--text-dim); display: none; line-height: 1.5; }
+.knowledge-tip.show { display: block; animation: fadeIn 0.4s ease; }
+.knowledge-tip strong { color: var(--accent); }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.tip { text-align: center; color: var(--text-muted); font-size: 0.76rem; margin-top: auto; padding-top: 12px; }
+.tip kbd { background: var(--surface2); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); font-size: 0.72rem; }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.78); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+.modal-overlay.show { opacity: 1; pointer-events: all; }
+.modal { background: var(--bg2); border: 1px solid rgba(0,245,212,0.3); border-radius: 18px; padding: 32px; max-width: 520px; width: 92%; text-align: center; box-shadow: 0 24px 70px rgba(0,0,0,0.55), var(--glow); transform: scale(0.88); transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1); max-height: 90vh; overflow-y: auto; }
+.modal-overlay.show .modal { transform: scale(1); }
+.modal h2 { font-family: var(--font-display); font-size: 1.45rem; margin-bottom: 6px; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.modal-sub { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 20px; }
+.results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+.result-card { background: var(--surface); border-radius: 10px; padding: 14px; border: 1px solid rgba(255,255,255,0.05); }
+.result-card .val { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+.result-card .lbl { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+.xp-gained { background: linear-gradient(135deg, rgba(0,245,212,0.12), rgba(155,93,229,0.15)); border: 1px solid rgba(0,245,212,0.25); border-radius: 10px; padding: 12px; margin-bottom: 16px; font-size: 0.9rem; }
+.xp-gained strong { color: var(--accent); font-family: var(--font-display); }
+.modal-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.btn { padding: 11px 22px; border-radius: 10px; font-family: var(--font-mono); font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; transition: all 0.25s; }
+.btn-primary { background: linear-gradient(135deg, var(--accent), #00c4a7); color: #070b14; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,245,212,0.4); }
+.btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid rgba(255,255,255,0.1); }
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: linear-gradient(135deg, var(--surface), var(--surface2)); border: 1px solid var(--accent); color: var(--text); padding: 12px 22px; border-radius: 12px; font-size: 0.85rem; z-index: 200; opacity: 0; transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1); box-shadow: var(--glow); pointer-events: none; white-space: nowrap; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+@media (max-width: 640px) { .words-container { font-size: 1.08rem; } .hud { gap: 12px; } .stat-value { font-size: 1.35rem; } .settings-panel { flex-direction: column; align-items: stretch; } .topics { grid-template-columns: 1fr 1fr; } .keyboard { display: none !important; } .player-stats { display: none; } }
+/* Allow changing settings/topic even while typing.
+   Only dim topics slightly so the user knows a test is active. */
+body.testing .topics { opacity: 0.75; }
+body.testing .start-btn {
+  background: linear-gradient(135deg, #ff006e, #9b5de5) !important;
+  box-shadow: 0 4px 18px rgba(255, 0, 110, 0.35);
+}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-orbs"><div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div></div>
+<div class="particles" id="particles"></div>
+<div class="toast" id="toast"></div>
+<div class="app">
+  <header>
+    <div class="logo-wrap">
+      <div class="logo">ExamType <span>Pro</span></div>
+      <div class="player-stats">
+        <div class="level-badge" id="levelBadge">Lv 1</div>
+        <div class="xp-bar-wrap"><div class="xp-bar" id="xpBar"></div></div>
+      </div>
+    </div>
+    <a href="index.html" class="home-link">← Home</a>
+  </header>
+  <div class="section-title">Select Subject — Deep Exam Revision</div>
+  <div class="topics" id="topics">
+    <button class="topic-btn" data-topic="coa"><span class="icon">🖥️</span>Computer Org & Arch</button>
+    <button class="topic-btn" data-topic="dbms"><span class="icon">🗄️</span>DBMS</button>
+    <button class="topic-btn" data-topic="oops"><span class="icon">☕</span>OOPs (Java)</button>
+    <button class="topic-btn" data-topic="ads"><span class="icon">🌳</span>Adv. Data Structures</button>
+    <button class="topic-btn" data-topic="stats"><span class="icon">📊</span>Prob. & Statistics</button>
+  </div>
+  <div class="settings-panel">
+    <div class="setting-group"><span class="setting-label">Keyboard</span><div class="toggle" id="kbToggle"></div></div>
+    <div class="setting-group">
+      <span class="setting-label">Duration</span>
+      <div class="duration-btns" id="durBtns">
+        <button class="dur-btn" data-sec="15">15s</button>
+        <button class="dur-btn active" data-sec="30">30s</button>
+        <button class="dur-btn" data-sec="60">60s</button>
+        <button class="dur-btn" data-sec="120">120s</button>
+      </div>
+    </div>
+    <button class="start-btn" id="startBtn" disabled>Select Topic First</button>
+  </div>
+  <div class="combo-banner" id="comboBanner"></div>
+  <div class="hud">
+    <div class="stat"><div class="stat-value" id="wpm">0</div><div class="stat-label">WPM</div></div>
+    <div class="stat"><div class="stat-value acc" id="acc">100</div><div class="stat-label">Accuracy</div></div>
+    <div class="stat"><div class="stat-value error" id="errors">0</div><div class="stat-label">Errors</div></div>
+    <div class="stat"><div class="stat-value combo" id="combo">0</div><div class="stat-label">Combo</div></div>
+    <div class="stat"><div class="stat-value" id="timeLeft">30</div><div class="stat-label">Time</div></div>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="progress"></div></div>
+  <div class="typing-area" id="typingArea">
+    <div class="focus-hint" id="focusHint">Click or press any key to focus • Start typing to begin</div>
+    <div class="words-container" id="words"></div>
+    <input type="text" class="input-hidden" id="input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  </div>
+  <div class="keyboard" id="keyboard">
+    <div class="kb-row">
+      <div class="kb-key" data-key="q">Q</div><div class="kb-key" data-key="w">W</div><div class="kb-key" data-key="e">E</div>
+      <div class="kb-key" data-key="r">R</div><div class="kb-key" data-key="t">T</div><div class="kb-key" data-key="y">Y</div>
+      <div class="kb-key" data-key="u">U</div><div class="kb-key" data-key="i">I</div><div class="kb-key" data-key="o">O</div><div class="kb-key" data-key="p">P</div>
+    </div>
+    <div class="kb-row">
+      <div class="kb-key" data-key="a">A</div><div class="kb-key" data-key="s">S</div><div class="kb-key" data-key="d">D</div>
+      <div class="kb-key" data-key="f">F</div><div class="kb-key" data-key="g">G</div><div class="kb-key" data-key="h">H</div>
+      <div class="kb-key" data-key="j">J</div><div class="kb-key" data-key="k">K</div><div class="kb-key" data-key="l">L</div>
+    </div>
+    <div class="kb-row">
+      <div class="kb-key wide" data-key="Shift">⇧</div>
+      <div class="kb-key" data-key="z">Z</div><div class="kb-key" data-key="x">X</div><div class="kb-key" data-key="c">C</div>
+      <div class="kb-key" data-key="v">V</div><div class="kb-key" data-key="b">B</div><div class="kb-key" data-key="n">N</div><div class="kb-key" data-key="m">M</div>
+      <div class="kb-key wide" data-key="Backspace">⌫</div>
+    </div>
+    <div class="kb-row"><div class="kb-key space" data-key=" ">SPACE</div></div>
+  </div>
+  <p class="tip">Press <kbd>Esc</kbd> to restart • Combo multiplies XP • Content is pure exam syllabus • Beat your personal best</p>
+</div>
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h2 id="modalTitle">Test Complete!</h2>
+    <p class="modal-sub" id="modalSub">Subject • Duration</p>
+    <div class="results-grid">
+      <div class="result-card"><div class="val" id="resWpm">0</div><div class="lbl">WPM</div></div>
+      <div class="result-card"><div class="val" id="resAcc">0%</div><div class="lbl">Accuracy</div></div>
+      <div class="result-card"><div class="val" id="resErrors">0</div><div class="lbl">Errors</div></div>
+      <div class="result-card"><div class="val" id="resCombo">0</div><div class="lbl">Max Combo</div></div>
+    </div>
+    <div class="xp-gained" id="xpGained">+0 XP</div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="retryBtn">Retry Same</button>
+      <button class="btn btn-secondary" id="newTopicBtn">Change Topic</button>
+    </div>
+  </div>
+</div>
+<script>
+
+const CONTENT = {
+  coa: [
+  "// Unit I: Fundamentals of Computer Systems",
+  "The basic functional units of a digital computer include the arithmetic logic unit, control unit, memory unit, and input-output unit that work together to execute instructions.",
+  "Computer registers are high-speed storage locations within the CPU used to hold data, addresses, and intermediate results during instruction execution.",
+  "The system bus structure consists of the data bus for transferring data, the address bus for specifying memory locations, and the control bus for coordinating operations.",
+  "Fixed-point representation stores numbers with a fixed number of digits after the radix point while floating-point representation uses a significand and exponent for a wider range.",
+  "Addition and subtraction in fixed-point arithmetic follow binary rules with careful handling of overflow and the sign bit using two's complement.",
+  "Multiplication algorithms such as Booth's algorithm reduce the number of partial products by examining consecutive bits of the multiplier.",
+  "Levels of programming languages range from high-level languages through assembly language down to machine instructions that the processor directly executes.",
+  "The machine cycle consists of the fetch cycle, decode cycle, and execute cycle while the bus cycle handles data transfers over the system bus.",
+  "Addressing modes specify how the operand of an instruction is located and include immediate, direct, indirect, register, and relative addressing.",
+  "The instruction cycle is the complete process of fetching an instruction from memory, decoding it, fetching operands, executing, and storing results.",
+  "Instruction formats define the layout of opcode and operand fields within a machine instruction and vary between RISC and CISC designs.",
+  "BCD representation encodes each decimal digit in four bits while ASCII provides a standard seven-bit or eight-bit encoding for characters.",
+  "Little-endian systems store the least significant byte of a multi-byte value at the lowest memory address whereas big-endian stores the most significant byte first.",
+  "Instruction pipelining overlaps the fetch, decode, and execute stages of successive instructions to improve instruction throughput.",
+  "// Unit II: Processor Design and Memory Organization",
+  "Accumulator-based CPU organization uses a single special register as the primary source and destination for most arithmetic operations.",
+  "General register organization provides a set of general-purpose registers that can serve as source or destination for instructions.",
+  "Stack organization uses a last-in first-out structure with push and pop operations often implemented with a stack pointer register.",
+  "RISC architectures emphasize a small set of simple instructions that execute in a single cycle while CISC provides complex multi-cycle instructions.",
+  "A hardwired control unit uses combinational logic circuits to generate control signals based on the current instruction and state.",
+  "A micro-programmed control unit stores control signals as microinstructions in a control memory that is sequenced during instruction execution.",
+  "Memory hierarchy arranges storage devices from fast expensive registers and cache through main memory down to slower cheaper secondary storage.",
+  "RAM chips provide volatile read-write storage while ROM chips store permanent data that is not lost when power is removed.",
+  "Cache memory reduces average memory access time by storing recently used blocks of main memory closer to the processor.",
+  "Mapping functions determine where a main-memory block is placed in cache and include direct mapping, fully associative, and set-associative mapping.",
+  "Replacement algorithms such as least recently used and first-in first-out decide which cache block to evict when a new block must be loaded.",
+  "Write policies decide when modified data is written back to main memory and include write-through and write-back approaches.",
+  "Virtual memory gives each process the illusion of a large contiguous address space by translating virtual addresses to physical addresses using page tables.",
+  "The memory management unit performs address translation and enforces protection by checking access rights on every memory reference.",
+  "// Unit III: I/O Architecture and Performance Enhancement",
+  "Peripheral devices communicate with the CPU through I/O interfaces that handle data formatting, buffering, and control signaling.",
+  "Asynchronous data transfer uses handshaking signals so that devices with different speeds can exchange data reliably.",
+  "Interrupts allow a device to signal the CPU that it needs attention causing the processor to suspend the current program and service the device.",
+  "Programmed I/O requires the CPU to continuously poll the device status while interrupt-driven I/O frees the CPU until the device requests service.",
+  "Direct memory access allows a device to transfer blocks of data to or from memory without continuous CPU intervention after initialization.",
+  "An I/O processor can execute its own instructions to manage complex data transfers freeing the main CPU for computation.",
+  "Flynn's classification categorizes parallel architectures as SISD, SIMD, MISD, and MIMD based on the number of instruction and data streams.",
+  "Instruction-level parallelism is exploited by pipelining and by issuing multiple instructions in the same cycle in superscalar processors.",
+  "Pipeline hazards include structural hazards from resource conflicts, data hazards from dependencies, and control hazards from branches.",
+  "Throughput is the number of instructions completed per unit time while speedup measures the improvement relative to a non-pipelined design.",
+  "USB and PCI Express are modern high-speed serial interfaces that have largely replaced older parallel buses for peripheral connectivity.",
+  "Interrupt priority schemes and daisy chaining allow multiple devices to share interrupt lines while preserving a defined service order.",
+  "Superscalar processors issue multiple independent instructions per cycle while VLIW architectures pack independent operations into long instruction words."
+],
+  dbms: [
+  "// Unit I: Fundamentals of Database Management Systems and SQL Programming",
+  "A database management system is software that provides an interface between users and the database while ensuring data integrity, security, and efficient access.",
+  "The three-level ANSI-SPARC architecture separates the external user views, the conceptual schema describing the entire database, and the internal physical storage schema.",
+  "Data independence allows the conceptual schema to change without affecting external views and the internal schema to change without affecting the conceptual schema.",
+  "In the relational model data is organized into relations which are tables consisting of tuples and attributes with a fixed domain for each attribute.",
+  "A primary key uniquely identifies each tuple in a relation while a foreign key references the primary key of another relation to enforce referential integrity.",
+  "Integrity constraints include entity integrity requiring primary keys to be non-null and unique and referential integrity ensuring foreign keys match existing primary keys or are null.",
+  "Entity-relationship modeling identifies entities, their attributes, and the relationships among entities using cardinality and participation constraints.",
+  "Relational algebra provides a procedural query language with operators including select, project, union, set difference, Cartesian product, and join.",
+  "// Unit II: Database Normalization, Security, and PL/SQL Programming",
+  "Functional dependency describes a constraint between two sets of attributes where the value of one set determines the value of the other set.",
+  "A candidate key is a minimal superkey that uniquely identifies tuples; one of the candidate keys is chosen as the primary key.",
+  "First normal form requires that every attribute value is atomic; second normal form eliminates partial dependencies of non-prime attributes on a candidate key.",
+  "Third normal form eliminates transitive dependencies of non-prime attributes while Boyce-Codd normal form requires every determinant to be a candidate key.",
+  "Database security threats include unauthorized access, SQL injection, privilege escalation, and denial of service; countermeasures involve authentication, authorization, encryption, and auditing.",
+  "// Unit III: Query Processing and Optimization, Transaction Processing, Concurrency Control, and Recovery",
+  "A transaction is a logical unit of work that must satisfy the ACID properties of atomicity, consistency, isolation, and durability.",
+  "Serializability ensures that the concurrent execution of transactions produces the same effect as some serial order of those transactions.",
+  "Locking protocols acquire shared or exclusive locks on data items; two-phase locking guarantees serializability by dividing lock acquisition and release phases.",
+  "Database recovery techniques use the log of operations to undo the effects of incomplete transactions and redo the effects of committed transactions after a failure."
+],
+  oops: [
+  "// Unit 1: Introduction to Classes in Java",
+  "Object-oriented programming in Java revolves around the core concepts of encapsulation, inheritance, polymorphism, and data abstraction.",
+  "The Java Virtual Machine interprets compiled bytecode, enabling the platform-independent nature of Java applications across different operating systems.",
+  "Reflection in Java allows a program to inspect and modify its own structure and behavior at runtime, including accessing private fields and methods.",
+  "The Java Development Kit provides the necessary tools, executables, and binaries to compile, debug, and run Java applications.",
+  "Bytecode interpretation involves the JVM reading the intermediate class files and translating them into machine-specific instructions on the fly.",
+  "Java data types are divided into primitive types, such as integers and booleans, and reference types, which point to objects in memory.",
+  "Variables act as memory locations to store data, while operators and expressions manipulate these values to produce new results.",
+  "Control structures like loops and conditional statements direct the flow of execution within a Java program based on logical evaluations.",
+  "Arrays in Java are objects that store multiple variables of the same type in a contiguous block of memory with a fixed size.",
+  "Searching algorithms like binary search and sorting algorithms like merge sort are fundamental operations applied to arrays and collections.",
+  "Functions, known as methods in Java, encapsulate reusable blocks of code that perform specific tasks and optionally return a value.",
+  "Abstract classes cannot be instantiated directly and often contain abstract methods that must be implemented by concrete subclasses.",
+  "Static classes, methods, and variables belong to the class itself rather than to any specific instance, meaning they are shared among all objects.",
+  "Inner classes are defined within the scope of another class and have access to the enclosing class's members, including private ones.",
+  "Constructors are special methods invoked automatically when an object is created, used to initialize the state of the new instance.",
+  "Function overloading allows multiple methods in the same class to share the same name provided their parameter lists are distinctly different.",
+  "Method overriding occurs when a subclass provides a specific implementation for a method that is already defined in its parent class.",
+  "Java supports single inheritance for classes using the extends keyword, but allows multiple inheritance of type through interface implementation.",
+  "Interfaces define a contract of abstract methods that implementing classes must fulfill, promoting loose coupling and polymorphism.",
+  "The this keyword refers to the current instance of the class, commonly used to resolve naming collisions between instance variables and parameters.",
+  "The super keyword accesses members and constructors of the immediate parent class, allowing subclasses to invoke overridden functionality.",
+  "Access control modifiers like public, private, protected, and default encapsulate data by restricting visibility to different parts of the program.",
+  "Packages organize related classes and interfaces into namespaces, preventing naming conflicts and controlling access boundaries.",
+  "Exception handling in Java uses try, catch, and finally blocks to gracefully manage runtime errors and maintain normal application flow.",
+  "The exception hierarchy is rooted in the Throwable class, splitting into Error for severe system issues and Exception for recoverable conditions.",
+  "The throw statement explicitly triggers an exception, while the throws clause in a method signature indicates that the caller must handle a checked exception.",
+  "// Unit 2: IO Package and Multithreading",
+  "The Java IO package provides a rich set of stream classes for reading from and writing to files, network sockets, and memory buffers.",
+  "Input streams read data sequentially from a source, while output streams write data sequentially to a designated destination.",
+  "Object serialization converts the state of a Java object into a byte stream, allowing it to be saved to a file or transmitted over a network.",
+  "Deserialization is the reverse process, reconstructing the original object in memory from a previously serialized sequence of bytes.",
+  "Filter streams wrap underlying base streams to provide additional functionality, such as buffering data to improve read and write performance.",
+  "Pipe streams are used for inter-thread communication, allowing data written by one thread to be read directly by another thread without temporary files.",
+  "The File class provides an abstract representation of file and directory pathnames, allowing programs to create, delete, and inspect files.",
+  "A thread is a lightweight sub-process representing an independent path of execution within a broader Java application.",
+  "The thread lifecycle consists of several states, including new, runnable, blocked, waiting, timed waiting, and terminated.",
+  "Multithreading maximizes CPU utilization by allowing concurrent execution of multiple tasks, which is highly beneficial for interactive applications.",
+  "While multithreading improves performance, it introduces complex issues such as race conditions, deadlocks, and thread starvation.",
+  "Creating a thread in Java is accomplished either by extending the Thread class or by implementing the Runnable interface.",
+  "Thread synchronization uses monitors and intrinsic locks to ensure that only one thread can access a critical section of code at a time.",
+  "The synchronized keyword can be applied to methods or specific blocks of code to prevent concurrent modification of shared resources.",
+  "// Unit 3: GUI and Database Connectivity",
+  "Java Database Connectivity provides a standard API for connecting Java applications to various relational database management systems.",
+  "The JDBC architecture relies on a driver manager that loads vendor-specific database drivers to translate Java calls into network protocols.",
+  "Establishing a database connection requires a valid database URL, username, and password, returning a Connection object to manage the session.",
+  "The Statement interface is used to execute static SQL queries and retrieve the results generated by the database.",
+  "PreparedStatement pre-compiles SQL statements, improving execution speed for repeated queries and offering protection against SQL injection attacks.",
+  "Common problems with raw JDBC include writing boilerplate code, managing resource closures manually, and dealing with complex checked exceptions.",
+  "Spring Boot simplifies enterprise Java development by providing auto-configuration, embedded application servers, and opinionated default settings.",
+  "Annotations in Spring Boot reduce boilerplate XML configuration by defining component behavior, routing, and dependencies directly in the source code.",
+  "The difference between plain JDBC and Spring JDBC is that Spring eliminates boilerplate resource management and provides a more robust exception hierarchy.",
+  "XML schemas and namespaces were traditionally used to configure Spring applications before annotation-based configuration became the standard.",
+  "The Project Object Model file, or pom.xml, is central to Maven, managing project dependencies, plugins, and automated build configurations.",
+  "The Spring JDBC Template streamlines database interactions by automatically handling connection acquisition, statement execution, and result set iteration.",
+  "The Spring DriverManagerDataSource is a simple implementation of the standard DataSource interface used to configure database connection properties.",
+  "A Plain Old Java Object is a simple, standard object not bound by framework-specific restrictions or interfaces.",
+  "A Spring Bean is an object that is instantiated, assembled, and managed by the Spring IoC container throughout its lifecycle.",
+  "Dependency injection in Spring automatically wires Beans together, promoting loose coupling and making applications significantly easier to test."
+],
+  ads: [
+  "// Unit 1: Foundations of Algorithms and Array-Based Data Structures",
+  "Asymptotic notations Big-O, Theta, and Omega describe the upper, tight, and lower bounds on the growth rate of an algorithm's running time or space usage.",
+  "Recursion solves a problem by reducing it to smaller instances of the same problem until a base case is reached; every recursive algorithm can be expressed with a recurrence relation.",
+  "The master method provides a cookbook solution for divide-and-conquer recurrences of the form T of n equals a T of n over b plus f of n under certain regularity conditions.",
+  "Quick sort selects a pivot, partitions the array around it, and recursively sorts the sub-arrays; its average-case time is Theta of n log n while the worst case is Theta of n squared.",
+  "Merge sort divides the array into two halves, recursively sorts them, and then merges the sorted halves in linear time achieving guaranteed Theta of n log n performance.",
+  "// Unit 2: Linked Data Structures, Trees, and Hashing Techniques",
+  "A singly linked list consists of nodes each containing data and a reference to the next node; insertion and deletion at the head are constant time operations.",
+  "A binary search tree maintains the invariant that all keys in the left subtree are less than the root and all keys in the right subtree are greater.",
+  "Tree traversals include preorder root-left-right, inorder left-root-right, and postorder left-right-root; level-order traversal visits nodes level by level using a queue.",
+  "Hashing maps keys to array indices using a hash function; a good hash function distributes keys uniformly to minimize collisions.",
+  "// Unit 3: Graph Algorithms and Dynamic Programming",
+  "Dijkstra's algorithm finds shortest paths from a single source in a graph with non-negative edge weights by always expanding the unsettled node with smallest distance.",
+  "Prim's algorithm grows a minimum spanning tree by repeatedly adding the cheapest edge that connects a vertex in the tree to a vertex outside the tree.",
+  "Kruskal's algorithm sorts all edges by weight and adds an edge to the spanning forest if it does not form a cycle using a union-find structure.",
+  "Dynamic programming solves problems by combining solutions to overlapping subproblems and storing intermediate results to avoid recomputation."
+],
+  stats: [
+  "// Unit 1: Basic Statistics and Probability",
+  "Measures of central tendency include the arithmetic mean, the median, and the mode which summarize the center of a data set under different interpretations.",
+  "Measures of dispersion such as range, variance, and standard deviation quantify the spread of observations around the central value.",
+  "Bayes' rule updates the probability of a hypothesis given new evidence by combining the prior probability with the likelihood of the observed data.",
+  "The binomial distribution models the number of successes in a fixed number of independent Bernoulli trials each having the same success probability.",
+  "The normal distribution is a continuous symmetric bell-shaped distribution completely determined by its mean and variance and serves as the limiting distribution of many sums.",
+  "// Unit 2: Curve Fitting and Large Sampling",
+  "The method of least squares finds the parameter values that minimize the sum of squared residuals between observed data and the values predicted by a model.",
+  "Fitting a straight line by least squares yields the slope and intercept that minimize the vertical squared distances from the data points to the line.",
+  "Large-sample tests for a single proportion compare an observed sample proportion with a hypothesized value using the normal approximation to the binomial.",
+  "// Unit 3: Bivariate Distributions and Small Sampling",
+  "Correlation measures the strength and direction of the linear relationship between two variables; the Pearson correlation coefficient ranges from minus one to plus one.",
+  "Linear regression models the expected value of a response variable as a linear function of one or more explanatory variables plus random error.",
+  "A small-sample test for a single mean uses Student's t-distribution when the population variance is unknown and the sample size is modest.",
+  "The chi-square goodness-of-fit test examines whether observed frequencies in categories are consistent with a hypothesized probability distribution."
+],
+};
+
+const TOPIC_NAMES = { coa: "Computer Organization & Architecture", dbms: "Database Management Systems", oops: "Object-Oriented Programming (Java)", ads: "Advanced Data Structures", stats: "Probability & Statistics" };
+const TIPS = {};
+const SAVE_KEY = 'examtype_pro_v2';
+function loadSave() { try { const r = localStorage.getItem(SAVE_KEY); if (r) return JSON.parse(r); } catch(e){} return { xp:0, level:1, bestWpm:{}, totalTests:0, maxCombo:0 }; }
+function saveProgress(d) { localStorage.setItem(SAVE_KEY, JSON.stringify(d)); }
+let save = loadSave();
+let state = { topic:null, showKeyboard:false, duration:30, words:[], wordIndex:0, charIndex:0, typed:"", typedHistory:[], started:false, finished:false, startTime:null, timerId:null, correctChars:0, incorrectChars:0, totalTyped:0, errors:0, combo:0, maxCombo:0 };
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playTone(freq, dur, type='square', vol=0.08) { if (audioCtx.state==='suspended') audioCtx.resume(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type=type; o.frequency.value=freq; g.gain.setValueAtTime(vol, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+dur); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+dur); }
+function soundKey(){ playTone(420+Math.random()*80,0.04,'triangle',0.04); }
+function soundCorrect(){ playTone(660,0.06,'sine',0.06); }
+function soundError(){ playTone(180,0.12,'sawtooth',0.07); }
+function soundCombo(n){ playTone(500+n*40,0.1,'square',0.09); }
+function soundLevelUp(){ playTone(523,0.12,'sine',0.1); setTimeout(()=>playTone(659,0.12,'sine',0.1),120); setTimeout(()=>playTone(784,0.18,'sine',0.12),240); }
+function soundFinish(){ [523,659,784,1047].forEach((f,i)=>setTimeout(()=>playTone(f,0.15,'sine',0.1),i*110)); }
+const topicsEl=document.getElementById('topics'), kbToggle=document.getElementById('kbToggle'), durBtns=document.getElementById('durBtns'), startBtn=document.getElementById('startBtn'), wordsEl=document.getElementById('words'), inputEl=document.getElementById('input'), focusHint=document.getElementById('focusHint'), typingArea=document.getElementById('typingArea'), wpmEl=document.getElementById('wpm'), accEl=document.getElementById('acc'), errorsEl=document.getElementById('errors'), comboEl=document.getElementById('combo'), timeLeftEl=document.getElementById('timeLeft'), progressEl=document.getElementById('progress'), modal=document.getElementById('modal'), retryBtn=document.getElementById('retryBtn'), newTopicBtn=document.getElementById('newTopicBtn'), comboBanner=document.getElementById('comboBanner'), keyboardEl=document.getElementById('keyboard'), levelBadge=document.getElementById('levelBadge'), xpBar=document.getElementById('xpBar'), toast=document.getElementById('toast'), particles=document.getElementById('particles');
+function xpForLevel(lv){ return Math.floor(100*Math.pow(1.35,lv-1)); }
+function updatePlayerUI(){ levelBadge.textContent='Lv '+save.level; const need=xpForLevel(save.level); xpBar.style.width=Math.min(100,(save.xp/need)*100)+'%'; }
+updatePlayerUI();
+function showToast(msg){ toast.textContent=msg; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),2600); }
+function spawnParticles(count=18){
+  for(let i=0;i<count;i++){
+    const p=document.createElement('div');
+    p.style.cssText="position:absolute;width:6px;height:6px;border-radius:50%;background:"+['#00f5d4','#9b5de5','#f15bb5','#fee440'][i%4]+";left:50%;top:40%;pointer-events:none;box-shadow:0 0 8px currentColor;";
+    particles.appendChild(p);
+    const angle=(Math.PI*2*i)/count, dist=80+Math.random()*120;
+    const dx=Math.cos(angle)*dist, dy=Math.sin(angle)*dist-40;
+    p.animate([
+      {transform:'translate(-50%,-50%) scale(1)',opacity:1},
+      {transform:'translate(calc(-50% + '+dx+'px), calc(-50% + '+dy+'px)) scale(0)',opacity:0}
+    ],{duration:700+Math.random()*400,easing:'cubic-bezier(0.2,0.8,0.3,1)'});
+    setTimeout(()=>p.remove(),1200);
+  }
+}
+function processText(text) {
+  return String(text).replace(/\s+/g, ' ').trim();
+}
+function generateWords(topic, duration) {
+  const raw = CONTENT[topic] || [];
+  const pool = raw
+    .map(s => processText(s))
+    .filter(s => s.length > 5);
+  if (!pool.length) return ['no content available for this subject'];
+  const needed = Math.ceil((duration / 60) * 180) + 120;
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
+  let result = [];
+  let i = 0;
+  while (result.length < needed) {
+    const words = shuffled[i % shuffled.length].split(/\s+/).filter(w => w.length > 0);
+    result.push(...words);
+    i++;
+  }
+  return result;
+}
+function renderWords(){ wordsEl.innerHTML=''; state.words.forEach(word=>{ const ws=document.createElement('span'); ws.className='word'; for(let i=0;i<word.length;i++){ const cs=document.createElement('span'); cs.className='char'; cs.textContent=word[i]; ws.appendChild(cs); } wordsEl.appendChild(ws); }); updateCaret(); highlightNextKey(); }
+function updateCaret(){ applyVisual(); }
+function highlightNextKey(){ document.querySelectorAll('.kb-key').forEach(k=>k.classList.remove('next')); if(!state.showKeyboard||state.finished) return; const word=state.words[state.wordIndex]; if(!word) return; let nextChar=state.charIndex<word.length?word[state.charIndex].toLowerCase():' '; const key=document.querySelector(`.kb-key[data-key="${nextChar}"]`)||document.querySelector(`.kb-key[data-key="${nextChar.toUpperCase()}"]`); if(key) key.classList.add('next'); }
+function updateStats(){ if(!state.started||state.finished) return; const elapsed=(Date.now()-state.startTime)/1000/60; if(elapsed<=0) return; const netWpm=Math.round((state.correctChars/5)/elapsed); wpmEl.textContent=Math.max(0,netWpm); const total=state.correctChars+state.incorrectChars; accEl.textContent=total===0?100:Math.round((state.correctChars/total)*100); errorsEl.textContent=state.errors; comboEl.textContent=state.combo; }
+function pulse(el){ el.classList.remove('pulse'); void el.offsetWidth; el.classList.add('pulse'); }
+function tick(){ if(!state.started||state.finished) return; const elapsed=(Date.now()-state.startTime)/1000; const remaining=Math.max(0,state.duration-elapsed); timeLeftEl.textContent=Math.ceil(remaining); progressEl.style.width=((remaining/state.duration)*100)+'%'; updateStats(); if(remaining<=0) finishTest(); }
+function showRandomTip(){}
+function startTest() {
+  if (!state.topic) return;
+  clearInterval(state.timerId);
+
+  state.words = generateWords(state.topic, state.duration);
+
+  if (!state.words || state.words.length === 0) {
+    showToast('No content for this subject');
+    return;
+  }
+
+  state.wordIndex = 0;
+  state.charIndex = 0;
+  state.typed = "";
+  state.typedHistory = [];
+  state.started = false;
+  state.finished = false;
+  state.correctChars = 0;
+  state.incorrectChars = 0;
+  state.totalTyped = 0;
+  state.errors = 0;
+  state.combo = 0;
+  state.maxCombo = 0;
+  state.startTime = null;
+
+  renderWords();
+  wpmEl.textContent = '0';
+  accEl.textContent = '100';
+  errorsEl.textContent = '0';
+  comboEl.textContent = '0';
+  timeLeftEl.textContent = state.duration;
+  progressEl.style.width = '100%';
+  comboBanner.classList.remove('show');
+  document.body.classList.add('testing');
+  startBtn.textContent = 'Abort & Restart';
+  inputEl.value = '';
+
+  setTimeout(() => {
+    inputEl.focus();
+    focusHint.classList.add('hidden');
+    typingArea.classList.add('focused');
+  }, 30);
+
+  
+}
+
+function scoreCurrentWord() {
+  // Score the incomplete word when time ends
+  const val = state.typed || '';
+  if (!val || state.wordIndex >= state.words.length) return;
+  const word = state.words[state.wordIndex];
+  if (!word) return;
+  let hadError = false;
+  for (let i = 0; i < word.length; i++) {
+    if (i < val.length) {
+      if (val[i] === word[i]) state.correctChars++;
+      else { state.incorrectChars++; hadError = true; }
+    } else {
+      state.incorrectChars++;
+      hadError = true;
+    }
+  }
+  if (val.length > word.length) {
+    state.incorrectChars += (val.length - word.length);
+    hadError = true;
+  }
+  if (hadError || val.length !== word.length) state.errors++;
+  else {
+    state.combo++;
+    if (state.combo > state.maxCombo) state.maxCombo = state.combo;
+  }
+  state.totalTyped += val.length;
+}
+
+function finishTest() {
+  if (state.finished) return;
+  state.finished = true;
+  clearInterval(state.timerId);
+  document.body.classList.remove('testing');
+  typingArea.classList.remove('focused');
+
+  // Count the last partial word so accuracy is fair
+  scoreCurrentWord();
+
+  soundFinish();
+  spawnParticles(24);
+
+  const elapsedMin = state.duration / 60;
+  const netWpm = Math.max(0, Math.round((state.correctChars / 5) / elapsedMin));
+  const total = state.correctChars + state.incorrectChars;
+  const acc = total === 0 ? 100 : Math.round((state.correctChars / total) * 100);
+
+  let xp = Math.round(netWpm * 0.8 + acc * 0.4 + state.maxCombo * 1.5);
+  if (acc >= 98) xp = Math.round(xp * 1.25);
+  if (state.maxCombo >= 20) xp = Math.round(xp * 1.15);
+  xp = Math.max(10, xp);
+
+  save.xp += xp;
+  save.totalTests++;
+  if (state.maxCombo > save.maxCombo) save.maxCombo = state.maxCombo;
+  if (!save.bestWpm[state.topic] || netWpm > save.bestWpm[state.topic]) {
+    save.bestWpm[state.topic] = netWpm;
+    showToast('🏆 New Personal Best!');
+  }
+
+  let leveled = false;
+  while (save.xp >= xpForLevel(save.level)) {
+    save.xp -= xpForLevel(save.level);
+    save.level++;
+    leveled = true;
+  }
+  saveProgress(save);
+  updatePlayerUI();
+  if (leveled) {
+    soundLevelUp();
+    showToast('⚡ LEVEL UP! You are now Level ' + save.level);
+  }
+
+  document.getElementById('resWpm').textContent = netWpm;
+  document.getElementById('resAcc').textContent = acc + '%';
+  document.getElementById('resErrors').textContent = state.errors;
+  document.getElementById('resCombo').textContent = state.maxCombo;
+  document.getElementById('xpGained').innerHTML = `<strong>+${xp} XP</strong> • Total Tests: ${save.totalTests} • Best Combo Ever: ${save.maxCombo}`;
+  document.getElementById('modalSub').textContent = TOPIC_NAMES[state.topic] + ' • ' + state.duration + 's';
+  document.getElementById('modalTitle').textContent = acc >= 95 ? 'Outstanding!' : acc >= 85 ? 'Great Work!' : 'Test Complete!';
+  
+  startBtn.textContent = 'Start Test';
+  modal.classList.add('show');
+}
+topicsEl.addEventListener('click', e => {
+  const btn = e.target.closest('.topic-btn');
+  if (!btn) return;
+  // If a test is running, abort it first
+  if (state.started && !state.finished) {
+    clearInterval(state.timerId);
+    state.finished = true;
+    document.body.classList.remove('testing');
+  }
+  document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  state.topic = btn.dataset.topic;
+  startBtn.disabled = false;
+  startBtn.textContent = 'Start Test';
+  startBtn.style.opacity = '1';
+  // Clear old words so user sees a clean state
+  wordsEl.innerHTML = '';
+  focusHint.classList.remove('hidden');
+  focusHint.textContent = 'Topic changed — click Start Test or press any key after focusing';
+  
+});
+kbToggle.addEventListener('click',()=>{ state.showKeyboard=!state.showKeyboard; kbToggle.classList.toggle('on',state.showKeyboard); keyboardEl.classList.toggle('show',state.showKeyboard); if(state.showKeyboard) highlightNextKey(); });
+durBtns.addEventListener('click',e=>{ const btn=e.target.closest('.dur-btn'); if(!btn) return; document.querySelectorAll('.dur-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); state.duration=parseInt(btn.dataset.sec,10); timeLeftEl.textContent=state.duration; });
+startBtn.addEventListener('click', () => {
+  if (!state.topic) return;
+  if (state.started && !state.finished) {
+    // Abort current test and restart with current settings
+    clearInterval(state.timerId);
+    state.finished = true;
+    document.body.classList.remove('testing');
+    startBtn.textContent = 'Start Test';
+  }
+  startTest();
+  startBtn.textContent = 'Abort & Restart';
+});
+typingArea.addEventListener('click',()=>{ inputEl.focus(); focusHint.classList.add('hidden'); typingArea.classList.add('focused'); });
+inputEl.addEventListener('focus',()=>{ focusHint.classList.add('hidden'); typingArea.classList.add('focused'); });
+inputEl.addEventListener('blur',()=>{ if(!state.started) typingArea.classList.remove('focused'); });
+
+// ---------- RELIABLE TYPING ENGINE ----------
+function applyVisual() {
+  const word = state.words[state.wordIndex];
+  if (word === undefined) return;
+  const wordEl = wordsEl.children[state.wordIndex];
+  if (!wordEl) return;
+
+  // Ensure only one blinking caret on the whole page
+  document.querySelectorAll('.char.current').forEach(c => c.classList.remove('current'));
+
+  // Fully rebuild this word's letters from scratch (prevents stuck letters)
+  wordEl.innerHTML = '';
+  const typed = state.typed || '';
+
+  for (let i = 0; i < word.length; i++) {
+    const span = document.createElement('span');
+    span.className = 'char';
+    span.textContent = word[i];
+    if (i < typed.length) {
+      span.classList.add(typed[i] === word[i] ? 'correct' : 'incorrect');
+    }
+    if (i === typed.length) {
+      span.classList.add('current');
+    }
+    wordEl.appendChild(span);
+  }
+  // Extra characters typed beyond the word
+  for (let i = word.length; i < typed.length; i++) {
+    const span = document.createElement('span');
+    span.className = 'char extra incorrect';
+    span.textContent = typed[i];
+    wordEl.appendChild(span);
+  }
+
+  state.charIndex = Math.min(typed.length, word.length);
+  highlightNextKey();
+}
+
+function commitWord() {
+  const word = state.words[state.wordIndex];
+  if (!word) { finishTest(); return; }
+  const wordEl = wordsEl.children[state.wordIndex];
+  const charEls = wordEl ? wordEl.querySelectorAll('.char:not(.extra)') : [];
+  const typed = state.typed;
+  let wordHadError = false;
+
+  for (let i = 0; i < word.length; i++) {
+    if (i < typed.length && typed[i] === word[i]) {
+      state.correctChars++;
+      if (charEls[i]) charEls[i].classList.add('correct');
+    } else {
+      state.incorrectChars++;
+      wordHadError = true;
+      if (charEls[i]) charEls[i].classList.add('incorrect');
+    }
+  }
+  if (typed.length > word.length) {
+    state.incorrectChars += (typed.length - word.length);
+    wordHadError = true;
+  }
+
+  if (wordHadError) {
+    state.errors++;
+    state.combo = 0;
+    soundError();
+    comboBanner.classList.remove('show');
+  } else {
+    state.combo++;
+    if (state.combo > state.maxCombo) state.maxCombo = state.combo;
+    soundCorrect();
+    if (state.combo >= 3) {
+      comboBanner.textContent = state.combo + ' COMBO!';
+      comboBanner.classList.add('show');
+      pulse(comboEl);
+      if (state.combo % 3 === 0) {
+        soundCombo(state.combo);
+        spawnParticles(6 + Math.min(state.combo, 20));
+      }
+      if (state.combo >= 10) comboBanner.textContent = '🔥 ' + state.combo + ' STREAK!';
+      if (state.combo >= 25) {
+        comboBanner.textContent = '⚡ GOD MODE ' + state.combo + '!';
+        spawnParticles(30);
+      }
+    }
+  }
+
+  state.totalTyped += typed.length + 1;
+  state.typedHistory.push(typed);
+  state.wordIndex++;
+  state.charIndex = 0;
+  state.typed = '';
+  inputEl.value = '';
+  updateCaret();
+  updateStats();
+  // Scroll only when moving to next word, and only if needed
+  const nextEl = wordsEl.children[state.wordIndex];
+  if (nextEl) {
+    const container = wordsEl.getBoundingClientRect();
+    const rect = nextEl.getBoundingClientRect();
+    if (rect.bottom > container.bottom || rect.top < container.top) {
+      nextEl.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+    }
+  }
+
+  if (state.wordIndex >= state.words.length) finishTest();
+}
+
+function ensureStarted() {
+  if (!state.started && !state.finished) {
+    state.started = true;
+    state.startTime = Date.now();
+    state.timerId = setInterval(tick, 80);
+  }
+}
+
+// Single keydown handler on document — most reliable for hidden inputs
+window.addEventListener('keydown', e => {
+  if (modal && modal.classList.contains('show')) return;
+  if (!state.topic || state.finished) return;
+
+  // Focus hidden input
+  if (document.activeElement !== inputEl) {
+    try { inputEl.focus({ preventScroll: true }); } catch (_) { try { inputEl.focus(); } catch(__){} }
+  }
+
+  const key = e.key;
+  const code = e.code;
+
+  if (key === 'Escape') {
+    e.preventDefault();
+    startTest();
+    return;
+  }
+  if (key === 'Tab') {
+    e.preventDefault();
+    return;
+  }
+
+  // BACKSPACE
+  if (key === 'Backspace' || code === 'Backspace' || e.keyCode === 8) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Delete one character in the current word
+    if (state.typed && state.typed.length > 0) {
+      state.typed = state.typed.substring(0, state.typed.length - 1);
+      inputEl.value = state.typed;
+      applyVisual();
+      return;
+    }
+
+    // Current word empty → go back to previous word and restore what was typed
+    if (state.wordIndex > 0) {
+      // Clear caret/classes on the word we are leaving
+      const leavingEl = wordsEl.children[state.wordIndex];
+      if (leavingEl) {
+        const original = state.words[state.wordIndex] || '';
+        leavingEl.innerHTML = '';
+        for (let i = 0; i < original.length; i++) {
+          const span = document.createElement('span');
+          span.className = 'char';
+          span.textContent = original[i];
+          leavingEl.appendChild(span);
+        }
+      }
+
+      state.wordIndex--;
+      const prevTyped = state.typedHistory.pop() || '';
+      const prevWord = state.words[state.wordIndex] || '';
+
+      // Undo score contribution of that word
+      let wasError = prevTyped !== prevWord;
+      if (wasError) {
+        state.errors = Math.max(0, state.errors - 1);
+      } else {
+        state.combo = Math.max(0, state.combo - 1);
+      }
+      for (let i = 0; i < prevWord.length; i++) {
+        if (i < prevTyped.length && prevTyped[i] === prevWord[i]) {
+          state.correctChars = Math.max(0, state.correctChars - 1);
+        } else {
+          state.incorrectChars = Math.max(0, state.incorrectChars - 1);
+        }
+      }
+      if (prevTyped.length > prevWord.length) {
+        state.incorrectChars = Math.max(0, state.incorrectChars - (prevTyped.length - prevWord.length));
+      }
+      state.totalTyped = Math.max(0, state.totalTyped - prevTyped.length - 1);
+
+      state.typed = prevTyped;
+      inputEl.value = state.typed;
+      applyVisual(); // caret now on the previous word
+      updateStats();
+    }
+    return;
+  }
+
+  // SPACE
+  if (key === ' ' || key === 'Spacebar' || code === 'Space') {
+    e.preventDefault();
+    if (!state.typed || state.typed.length === 0) return;
+    ensureStarted();
+    commitWord();
+    return;
+  }
+
+  // Printable character (ignore modifiers alone)
+  if (key && key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+    e.preventDefault();
+    ensureStarted();
+    state.typed = (state.typed || '') + key;
+    inputEl.value = state.typed;
+    applyVisual();
+  }
+}, true);
+
+// Fallback: also sync from the real input element (covers mobile / IME / edge cases)
+inputEl.addEventListener('input', () => {
+  if (state.finished || !state.topic) return;
+  const v = inputEl.value;
+  // If browser deleted something our keydown missed
+  if (v.length < (state.typed || '').length) {
+    state.typed = v;
+    applyVisual();
+    return;
+  }
+  // If browser added something
+  if (v.length > (state.typed || '').length && !v.endsWith(' ')) {
+    state.typed = v;
+    ensureStarted();
+    applyVisual();
+  }
+});
+
+typingArea.addEventListener('click',()=>{ inputEl.focus(); focusHint.classList.add('hidden'); typingArea.classList.add('focused'); });
+inputEl.addEventListener('focus',()=>{ focusHint.classList.add('hidden'); typingArea.classList.add('focused'); });
+inputEl.addEventListener('blur',()=>{ if(!state.started) typingArea.classList.remove('focused'); });
+
+retryBtn.addEventListener('click',()=>{ modal.classList.remove('show'); startTest(); });
+newTopicBtn.addEventListener('click', () => {
+  modal.classList.remove('show');
+  document.body.classList.remove('testing');
+  state.topic = null;
+  state.started = false;
+  state.finished = false;
+  clearInterval(state.timerId);
+  document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+  startBtn.disabled = true;
+  startBtn.textContent = 'Select Topic First';
+  wordsEl.innerHTML = '';
+  focusHint.classList.remove('hidden');
+  focusHint.textContent = 'Click or press any key to focus • Start typing to begin';
+  
+  wpmEl.textContent = '0';
+  accEl.textContent = '100';
+  errorsEl.textContent = '0';
+  comboEl.textContent = '0';
+  timeLeftEl.textContent = state.duration;
+  progressEl.style.width = '100%';
+});
+timeLeftEl.textContent=state.duration;
+</script>
+</body>
+</html>
