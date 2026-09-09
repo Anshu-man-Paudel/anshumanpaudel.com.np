@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vocabulary Sets | Sanctuary</title>
+  <style>
+    body {
+      background-color: #0d1117;
+      color: #e6edf3;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    .container {
+      max-width: 650px;
+      width: 100%;
+    }
+    a.back {
+      color: #58a6ff;
+      text-decoration: none;
+      font-size: 0.95rem;
+      display: inline-block;
+      margin-bottom: 24px;
+    }
+    a.back:hover {
+      text-decoration: underline;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+    p.subtitle {
+      color: #8b949e;
+      margin-bottom: 30px;
+    }
+    .file-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: border-color 0.2s ease;
+    }
+    .card:hover {
+      border-color: #58a6ff;
+    }
+    .card-title {
+      font-weight: 600;
+      color: #f0f6fc;
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+    }
+    .btn {
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .btn-view {
+      background-color: #21262d;
+      color: #58a6ff;
+      border: 1px solid #30363d;
+    }
+    .btn-view:hover {
+      background-color: #30363d;
+    }
+    .btn-dl {
+      background-color: #238636;
+      color: #ffffff;
+      border: 1px solid transparent;
+    }
+    .btn-dl:hover {
+      background-color: #2ea043;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back">&larr; Back to Sanctuary</a>
+    <h1>Vocabulary Sets</h1>
+    <p class="subtitle">Access and download study sheets below.</p>
+
+    <div class="file-list">
+      <!-- Vocabulary Set 1 -->
+      <div class="card">
+        <span class="card-title">Vocabulary Set 1</span>
+        <div class="actions">
+          <a href="Vocabulary_Sets/Vocabulary_Set_1.pdf" target="_blank" rel="noopener" class="btn btn-view">View</a>
+          <a href="Vocabulary_Sets/Vocabulary_Set_1.pdf" download class="btn btn-dl">Download</a>
+        </div>
+      </div>
+
+      <!-- Vocabulary Set 2 -->
+      <div class="card">
+        <span class="card-title">Vocabulary Set 2</span>
+        <div class="actions">
+          <a href="Vocabulary_Sets/Vocabulary_Set_2.pdf" target="_blank" rel="noopener" class="btn btn-view">View</a>
+          <a href="Vocabulary_Sets/Vocabulary_Set_2.pdf" download class="btn btn-dl">Download</a>
+        </div>
+      </div>
+
+      <!-- Vocabulary Set 3 -->
+      <div class="card">
+        <span class="card-title">Vocabulary Set 3</span>
+        <div class="actions">
+          <a href="Vocabulary_Sets/Vocabulary_Set_3.pdf" target="_blank" rel="noopener" class="btn btn-view">View</a>
+          <a href="Vocabulary_Sets/Vocabulary_Set_3.pdf" download class="btn btn-dl">Download</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
